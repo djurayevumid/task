@@ -25,8 +25,6 @@ public class UserDaoJDBCImpl implements UserDao {
         } catch (SQLException e) {
             e.printStackTrace();
             connection.rollback();
-        } finally {
-            connection.setAutoCommit(true);
         }
     }
 
@@ -39,8 +37,6 @@ public class UserDaoJDBCImpl implements UserDao {
         } catch (SQLException e) {
             e.printStackTrace();
             connection.rollback();
-        } finally {
-            connection.setAutoCommit(true);
         }
     }
 
@@ -71,8 +67,6 @@ public class UserDaoJDBCImpl implements UserDao {
         } catch (SQLException e) {
             e.printStackTrace();
             connection.rollback();
-        } finally {
-            connection.setAutoCommit(true);
         }
     }
 
@@ -104,8 +98,6 @@ public class UserDaoJDBCImpl implements UserDao {
         } catch (SQLException e) {
             e.printStackTrace();
             connection.rollback();
-        } finally {
-            connection.setAutoCommit(true);
         }
     }
 }
