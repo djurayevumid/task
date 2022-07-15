@@ -1,10 +1,7 @@
 package jm.task.core.jdbc;
-
 import jm.task.core.jdbc.dao.UserDao;
 import jm.task.core.jdbc.dao.UserDaoJDBCImpl;
-
 import java.sql.*;
-
 public class Main {
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         UserDao userDao = new UserDaoJDBCImpl();
