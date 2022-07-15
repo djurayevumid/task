@@ -16,20 +16,10 @@ public class Util {
             String password = "James4root!!";
             String connectionUrl = "jdbc:mysql://localhost:3306/smth";
             connection = DriverManager.getConnection(connectionUrl, userName, password);
-
-        }catch (ClassNotFoundException e) {
+            connection.setAutoCommit(false);
+        } catch (ClassNotFoundException e) {
             System.out.println("ConnectionERROR: " + e.getMessage());
         }
         return connection;
     }
-    public static Util getInstance() throws SQLException {
-        if (util == null) {
-            util = new Util();
-        } else if (util.getSQLConnection().isClosed()) {
-            util = new Util();
-        }
-        return util;
-    }
-
-
 }

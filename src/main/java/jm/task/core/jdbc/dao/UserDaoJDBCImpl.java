@@ -7,8 +7,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDaoJDBCImpl implements UserDao {
-    Connection connection = Util.getInstance().getSQLConnection();
+
+
+public class    UserDaoJDBCImpl implements UserDao {
+
+    Connection connection = Util.getSQLConnection();
 
     public UserDaoJDBCImpl() throws SQLException {
 
@@ -19,8 +22,7 @@ public class UserDaoJDBCImpl implements UserDao {
                 "(id int not null AUTO_INCREMENT, name varchar(30) not null, " +
                 "lastName varchar(50) not null, age int, primary key(id))";
         try (Statement statement = connection.createStatement()) {
-            connection.setAutoCommit(false);
-            statement.executeUpdate(createTableSQL);
+            statement.execute(createTableSQL);
             connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -30,9 +32,8 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void dropUsersTable() throws SQLException {
         String dropTable = "drop table if exists USERS";
-        try (Statement statement = connection.createStatement()) {
-            connection.setAutoCommit(false);
-            statement.executeUpdate(dropTable);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(dropTable)) {
+           preparedStatement.executeUpdate();
             connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -43,30 +44,27 @@ public class UserDaoJDBCImpl implements UserDao {
     public void saveUser(String name, String lastName, byte age) throws SQLException {
         String insertPerson = "insert into USERS(name, lastName, age) values (?, ?, ?)";
         try (PreparedStatement prep = connection.prepareStatement(insertPerson)) {
-            connection.setAutoCommit(false);
             prep.setString(1, name);
             prep.setString(2, lastName);
             prep.setByte(3, age);
             prep.executeUpdate();
-            System.out.println("User " + "'" + name + "'" + "added into data base");
+            System.out.println("User " + " " + "'" + name + "'" + "added into data base");
             connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
             connection.rollback();
-        } finally {
-            connection.setAutoCommit(true);
         }
     }
 
     public void removeUserById(long id) throws SQLException {
         String deletePerson = "delete from USERS where id = " + id;
-        try (Statement statement = connection.createStatement()) {
-            connection.setAutoCommit(false);
-            statement.executeUpdate(deletePerson);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(deletePerson)) {
+            preparedStatement.executeUpdate();
             connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
             connection.rollback();
+
         }
     }
 
@@ -81,8 +79,6 @@ public class UserDaoJDBCImpl implements UserDao {
                 Byte age = resultSet.getByte("age");
                 userList.add(new User(name, lastName, age));
             }
-            preparedStatement.close();
-            resultSet.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -92,8 +88,7 @@ public class UserDaoJDBCImpl implements UserDao {
     public void cleanUsersTable() throws SQLException {
         String clear = "truncate table USERS";
         try (Statement statement = connection.createStatement()) {
-            connection.setAutoCommit(false);
-            statement.executeUpdate(clear);
+            statement.execute(clear);
             connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
